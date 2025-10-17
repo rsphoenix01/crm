@@ -1,0 +1,42 @@
+{
+  "expo": {
+    "name": "Field Sales CRM",
+    "slug": "field-sales-crm",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#007AFF"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yourcompany.fieldsalescrm",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "This app needs access to location for check-ins and navigation.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "This app needs access to location for tracking your visits.",
+        "NSContactsUsageDescription": "This app needs access to contacts to import customer information.",
+        "NSCameraUsageDescription": "This app needs access to camera to take photos."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.yourcompany.fieldsalescrm",
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "READ_CONTACTS",
+        "CAMERA"
+      ]
+    }
+  }
+}
