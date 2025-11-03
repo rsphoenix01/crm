@@ -29,6 +29,11 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBqYAec_Mc5hxZFioUKAIhHVtY0q-Al4XM"
+        }
+      },
       "package": "com.yourcompany.fieldsalescrm",
       "permissions": [
         "ACCESS_FINE_LOCATION",
@@ -37,6 +42,11 @@
         "READ_CONTACTS",
         "CAMERA"
       ]
+    },
+    "extra": {
+      "eas": {
+        "projectId": "080bf63a-120f-4cf7-8b3c-4eb5c41c4499"
+      }
     }
   }
 }

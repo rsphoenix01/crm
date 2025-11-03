@@ -22,13 +22,16 @@ import AddOrderScreen from './src/screens/AddOrderScreen';
 import TasksScreen from './src/screens/TasksScreen';
 import ReportsScreen from './src/screens/ReportsScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
+import UserManagementScreen from './src/screens/UserManagementScreen';
+import AddUserScreen from './src/screens/AddUserScreen';
+import EditUserScreen from './src/screens/EditUserScreen';
 
 // Create AuthContext for ProfileScreen
 export const AuthContext = createContext();
 
 // IMPORTANT: Replace with your computer's actual IP address!
 // Find it using: ipconfig (Windows) or ifconfig (Mac/Linux)
-const SOCKET_URL = 'http://192.168.68.127:5000';
+const SOCKET_URL = 'http://192.168.68.128:5000';
 
 // Global socket instance
 export let socket = null;
@@ -199,6 +202,37 @@ function MainStack({ onLogout, user }) {
             headerTitleStyle: { fontWeight: 'bold' },
           }}
         />
+        
+<Stack.Screen 
+  name="UserManagement" 
+  component={UserManagementScreen}
+  options={{ 
+    title: 'User Management',
+    headerStyle: { backgroundColor: '#007AFF' },
+    headerTintColor: '#fff',
+    headerTitleStyle: { fontWeight: 'bold' },
+  }}
+/>
+<Stack.Screen 
+  name="AddUser" 
+  component={AddUserScreen}
+  options={{ 
+    title: 'Add User',
+    headerStyle: { backgroundColor: '#007AFF' },
+    headerTintColor: '#fff',
+    headerTitleStyle: { fontWeight: 'bold' },
+  }}
+/>
+<Stack.Screen 
+  name="EditUser" 
+  component={EditUserScreen}
+  options={{ 
+    title: 'Edit User',
+    headerStyle: { backgroundColor: '#007AFF' },
+    headerTintColor: '#fff',
+    headerTitleStyle: { fontWeight: 'bold' },
+  }}
+/>
         <Stack.Screen 
           name="Reports" 
           component={ReportsScreen}
@@ -249,18 +283,39 @@ export default function App() {
 
 const checkLoginStatus = async () => {
   try {
-    // 🧹 FORCE CLEAR ALL STORAGE (temporary fix)
-    console.log('🧹 Clearing all storage...');
-    await AsyncStorage.clear();
+    console.log('🔍 Checking login status...');
     
-    console.log('✅ Storage cleared - user will see login screen');
+    // Check for existing token and user data
+    const token = await AsyncStorage.getItem('userToken');
+    const userDataString = await AsyncStorage.getItem('userData');
     
-    // Don't check for existing tokens - force fresh login
-    setIsLoggedIn(false);
-    setUserData(null);
+    if (token && userDataString) {
+      console.log('✅ Found existing session');
+      
+      const user = JSON.parse(userDataString);
+      console.log('👤 User:', user.email, 'Role:', user.role);
+      
+      // Set token in ApiService
+      ApiService.setToken(token);
+      
+      // Update state
+      setUserData(user);
+      setIsLoggedIn(true);
+      
+      // Initialize socket
+      initializeSocket(user.id || user._id);
+      
+      console.log('✅ Session restored successfully');
+    } else {
+      console.log('ℹ️ No existing session found');
+      setIsLoggedIn(false);
+      setUserData(null);
+    }
     
   } catch (error) {
-    console.error('Error clearing storage:', error);
+    console.error('❌ Error checking login status:', error);
+    setIsLoggedIn(false);
+    setUserData(null);
   } finally {
     setIsLoading(false);
   }
@@ -268,14 +323,28 @@ const checkLoginStatus = async () => {
   // ... rest of your App.js code stays the same
 
   const handleLogin = async (user) => {
-    setUserData(user);
-    setIsLoggedIn(true);
-    
-    // Initialize socket on login
-    console.log('🔐 User logged in, initializing socket...');
-    initializeSocket(user.id);
+    try {
+      console.log('🔐 handleLogin called with user:', user);
+      console.log('👤 User role:', user.role);
+      
+      // IMPORTANT: Save to AsyncStorage first
+      await AsyncStorage.setItem('userData', JSON.stringify(user));
+      console.log('💾 User data saved to AsyncStorage');
+      
+      // Update state
+      setUserData(user);
+      setIsLoggedIn(true);
+      
+      // Initialize socket with correct ID (handle both id and _id)
+      const userId = user.id || user._id;
+      console.log('🔌 Initializing socket for user ID:', userId);
+      initializeSocket(userId);
+      
+      console.log('✅ Login completed successfully');
+    } catch (error) {
+      console.error('❌ Error in handleLogin:', error);
+    }
   };
-
   const handleLogout = async () => {
     try {
       console.log('🚪 Starting logout process...');
@@ -298,7 +367,7 @@ const checkLoginStatus = async () => {
       
       console.log('👋 Logout completed successfully');
       
-      // Update app state - this will automatically switch to Login screen
+      // Update app state
       setIsLoggedIn(false);
       setUserData(null);
       

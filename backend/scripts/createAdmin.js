@@ -22,7 +22,7 @@ async function createAdmin() {
     
     const admin = new User({
       name: 'Admin',
-      email: 'admin@yourcompany.com',
+      email: 'admin@synergytech.in',
       password: hashedPassword,
       phone: '9999999999',
       role: 'admin'

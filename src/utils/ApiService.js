@@ -1,7 +1,7 @@
 // utils/ApiService.js - Enhanced with Map-based Location Support - FIXED VERSION
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_BASE_URL = 'http://192.168.68.127:5000/api'; // Replace with your actual API URL
+const API_BASE_URL = 'http://192.168.68.128:5000/api'; // Replace with your actual API URL
 
 class ApiService {
   constructor() {
