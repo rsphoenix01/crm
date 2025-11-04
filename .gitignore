@@ -35,3 +35,52 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# ===== ADDITIONS BELOW =====
+
+# Secrets & Service Accounts (CRITICAL!)
+google-play-service-account.json
+service-account-*.json
+
+# Environment files
+.env
+.env.production
+.env.development
+
+# Build outputs
+*.apk
+*.aab
+*.ipa
+
+# IDE / Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Logs
+logs/
+*.log
+
+# Android
+.gradle/
+local.properties
+.externalNativeBuild/
+.cxx/
+
+# iOS
+ios/Pods/
+xcuserdata/
+DerivedData/
+
+# Testing
+coverage/
+.nyc_output/
+
+# Temporary
+.tmp/
+tmp/
